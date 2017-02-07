@@ -6,8 +6,12 @@ var express = require("express");
 var crypto = require("crypto");
 var http = require("http");
 var cfenv = require('cfenv');
+var fs = require('fs');
 var events = require("events");
 var eventHandler = new events.EventEmitter();
+var bodyParser = require('body-parser');
+var jsonParser = bodyParser.json();
+
 
 var WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 // var WEBHOOK_SECRET = '32ltozd7yiykq1rcglxnxk77rbsg69je';
@@ -82,7 +86,7 @@ app.get('/test', function(req, res){
 res.send('hey');
 })
 
-app.post(WEBHOOK_CALLBACK, function(req, res) {
+app.post(WEBHOOK_CALLBACK, jsonParser, function(req, res) {
 	var data = { eventTime: new Date()};
 
 	if (!verifySender(req.headers, req.rawBody)) {
@@ -91,7 +95,7 @@ app.post(WEBHOOK_CALLBACK, function(req, res) {
 			res.status(200).end();
 			return;
 	}
-  var body = JSON.parse(req.rawBody.toString());
+  var body = req.body;
 	var stringJsonbody = JSON.stringify(body);
 	var eventType = body.type;
 	if (eventType === "verification")
@@ -117,6 +121,9 @@ function verifySender(headers, rawbody)
 {
     var headerToken = headers[WEBHOOK_VERIFICATION_TOKEN_HEADER];
     var endpointSecret =  WEBHOOK_SECRET;
+		console.log("Verifying Sender:");
+		console.dir("Secret: " + endpointSecret);
+		console.dir("HeaderToken: " + headerToken);
     var expectedToken = crypto
 		.createHmac("sha256", endpointSecret)
 		.update(rawbody)
