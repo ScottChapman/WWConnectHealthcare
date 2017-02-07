@@ -3,6 +3,6 @@ applications:
   memory: 256M
   instances: 1
   domain: mybluemix.net
-  name: sceventlistener
-  host: sceventlistener
+  name: WWConnect2017Healthcare
+  host: WWConnect2017Healthcare
   disk_quota: 1024M
