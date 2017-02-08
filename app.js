@@ -197,6 +197,7 @@ const send = (spaceId, text, tok, cb) => {
 
 function handleVerificationRequest(response, challenge)
 {
+	  console.log("Secret: " + WEBHOOK_SECRET);
     var responseBodyObject = { "response" : challenge };
     var responseBodyString = JSON.stringify(responseBodyObject);
     var endpointSecret =  WEBHOOK_SECRET;
