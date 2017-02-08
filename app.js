@@ -73,7 +73,7 @@ function formatDate(date) {
 app.get("/webhook", function(req, res) {
 	fs.readFile(__dirname + "/public/webhook.html", 'utf-8', function(err, data) {
     if (err) {
-      logger.info(err);
+      console.log("Error:" + err);
       res.writeHead(500);
       return res.end("Error loading webhook-event-log.html");
     }
