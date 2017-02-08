@@ -114,21 +114,21 @@ app.post(WEBHOOK_CALLBACK, function(req, res) {
 		io.sockets.emit('webhook-event', data);
 		// React to 'hello' or 'hey' keywords in the message and send an echo
 	  // message back to the conversation in the originating space
-	  if(req.body.content
+	  if(body.content
 	    // Tokenize the message text into individual words
 	    .split(/[^A-Za-z0-9]+/)
 	    // Look for the hello and hey words
 	    .filter((word) => /^(hello|hey)$/i.test(word)).length)
 
 	    // Send the echo message
-	    send(req.body.spaceId,
+	    send(body.spaceId,
 	      util.format(
 	        'Hey %s, did you say %s?',
-	        req.body.userName, req.body.content),
+	        body.userName, body.content),
 	      token(),
 	      (err, res) => {
 	        if(!err)
-	          log('Sent message to space %s', req.body.spaceId);
+	          log('Sent message to space %s', body.spaceId);
 	      });
 		res.status(200).end();
 	}
