@@ -8,6 +8,7 @@
   "dependencies": {
     "body-parser": "^1.16.0",
     "cfenv": "^1.0.3",
+    "debug": "^2.6.0",
     "express": "4.13.x",
     "moment": "^2.16.0",
     "socket.io": "^1.5.1"

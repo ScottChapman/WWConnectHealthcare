@@ -11,6 +11,9 @@ var events = require("events");
 var eventHandler = new events.EventEmitter();
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
+var debug = require('debug');
+
+var log = debug("WWConnect2017Healthcare");
 
 
 var WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
@@ -127,7 +130,6 @@ app.post(WEBHOOK_CALLBACK, jsonParser, function(req, res) {
 	        if(!err)
 	          log('Sent message to space %s', req.body.spaceId);
 	      });
-
 		res.status(200).end();
 	}
 
