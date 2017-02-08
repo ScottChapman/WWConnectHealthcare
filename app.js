@@ -89,7 +89,7 @@ app.get('/test', function(req, res){
 res.send('hey');
 })
 
-app.post(WEBHOOK_CALLBACK, jsonParser, function(req, res) {
+app.post(WEBHOOK_CALLBACK, function(req, res) {
 	var data = { eventTime: new Date()};
 
 	if (!verifySender(req.headers, req.rawBody)) {
@@ -98,7 +98,7 @@ app.post(WEBHOOK_CALLBACK, jsonParser, function(req, res) {
 			res.status(200).end();
 			return;
 	}
-  var body = req.body;
+  var body = JSON.parse(req.body);
 	var stringJsonbody = JSON.stringify(body);
 	var eventType = body.type;
 	if (eventType === "verification")
