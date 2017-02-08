@@ -12,6 +12,7 @@ var eventHandler = new events.EventEmitter();
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 var debug = require('debug');
+var util = require('util');
 
 var log = debug("WWConnect2017Healthcare");
 
@@ -118,18 +119,18 @@ app.post(WEBHOOK_CALLBACK, function(req, res) {
 	    // Tokenize the message text into individual words
 	    .split(/[^A-Za-z0-9]+/)
 	    // Look for the hello and hey words
-	    .filter((word) => /^(hello|hey)$/i.test(word)).length)
-
-	    // Send the echo message
-	    send(body.spaceId,
-	      util.format(
-	        'Hey %s, did you say %s?',
-	        body.userName, body.content),
-	      token(),
-	      (err, res) => {
-	        if(!err)
-	          log('Sent message to space %s', body.spaceId);
-	      });
+	    .filter((word) => /^(hello|hey)$/i.test(word)).length) {
+		    // Send the echo message
+		    send(body.spaceId,
+		      util.format(
+		        'Hey %s, did you say %s?',
+		        body.userName, body.content),
+		      token(),
+		      (err, res) => {
+		        if(!err)
+		          log('Sent message to space %s', body.spaceId);
+		      });
+			}
 		res.status(200).end();
 	}
 
