@@ -109,6 +109,24 @@ app.post(WEBHOOK_CALLBACK, jsonParser, function(req, res) {
 		// console.log("Latency: " + (Date.now() - body.time) );
 		data.body = body;
 		io.sockets.emit('webhook-event', data);
+		// React to 'hello' or 'hey' keywords in the message and send an echo
+	  // message back to the conversation in the originating space
+	  if(req.body.content
+	    // Tokenize the message text into individual words
+	    .split(/[^A-Za-z0-9]+/)
+	    // Look for the hello and hey words
+	    .filter((word) => /^(hello|hey)$/i.test(word)).length)
+
+	    // Send the echo message
+	    send(req.body.spaceId,
+	      util.format(
+	        'Hey %s, did you say %s?',
+	        req.body.userName, req.body.content),
+	      token(),
+	      (err, res) => {
+	        if(!err)
+	          log('Sent message to space %s', req.body.spaceId);
+	      });
 
 		res.status(200).end();
 	}
@@ -134,6 +152,46 @@ function verifySender(headers, rawbody)
     }
 	return Boolean(false);
 }
+
+// Send an app message to the conversation in a space
+const send = (spaceId, text, tok, cb) => {
+  request.post(
+    'https://api.watsonwork.ibm.com/v1/spaces/' + spaceId + '/messages', {
+      headers: {
+        Authorization: 'Bearer ' + tok
+      },
+      json: true,
+      // An App message can specify a color, a title, markdown text and
+      // an 'actor' useful to show where the message is coming from
+      body: {
+        type: 'appMessage',
+        version: 1.0,
+        annotations: [{
+          type: 'generic',
+          version: 1.0,
+
+          color: '#6CB7FB',
+          title: 'Echo message',
+          text: text,
+
+          actor: {
+            name: 'from sample echo app',
+            avatar: 'https://avatars1.githubusercontent.com/u/22985179',
+            url: 'https://github.com/watsonwork/watsonwork-echo'
+          }
+        }]
+      }
+    }, (err, res) => {
+      if(err || res.statusCode !== 201) {
+        log('Error sending message %o', err || res.statusCode);
+        cb(err || new Error(res.statusCode));
+        return;
+      }
+      log('Send result %d, %o', res.statusCode, res.body);
+      cb(null, res.body);
+    });
+};
+
 
 function handleVerificationRequest(response, challenge)
 {
