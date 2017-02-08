@@ -16,8 +16,8 @@ var debug = require('debug');
 var log = debug("WWConnect2017Healthcare");
 
 
-var WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
-// var WEBHOOK_SECRET = '32ltozd7yiykq1rcglxnxk77rbsg69je';
+// var WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
+var WEBHOOK_SECRET = 'lohfneh9nzn981f1gp0fjvciu54e7j8u';
 const WEBHOOK_CALLBACK = "/webhook_callback";
 
 var WEBHOOK_VERIFICATION_TOKEN_HEADER="X-OUTBOUND-TOKEN".toLowerCase();
