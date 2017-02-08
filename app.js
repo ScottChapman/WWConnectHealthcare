@@ -98,7 +98,7 @@ app.post(WEBHOOK_CALLBACK, function(req, res) {
 			res.status(200).end();
 			return;
 	}
-  var body = JSON.parse(req.body);
+  var body = JSON.parse(req.rawBody.toString());
 	var stringJsonbody = JSON.stringify(body);
 	var eventType = body.type;
 	if (eventType === "verification")
