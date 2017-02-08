@@ -114,7 +114,7 @@ app.post(WEBHOOK_CALLBACK, function(req, res) {
 		io.sockets.emit('webhook-event', data);
 		// React to 'hello' or 'hey' keywords in the message and send an echo
 	  // message back to the conversation in the originating space
-	  if(body.content
+	  if(body.hasOwnProperty("content") && body.content
 	    // Tokenize the message text into individual words
 	    .split(/[^A-Za-z0-9]+/)
 	    // Look for the hello and hey words
