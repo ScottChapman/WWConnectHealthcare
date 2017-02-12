@@ -7,6 +7,7 @@ applications:
   host: WWConnect2017Healthcare
   disk_quota: 2G
   command: node lib/app.js
+  buildpack: sdk-for-nodejs
   env:
     ECHO_APP_ID: 7f04e6b3-0d97-43a5-99a3-0ea824732f4b
     ECHO_APP_SECRET: j8zur9993nx0uhroy5x3d5xneh89ibeg
