@@ -1,8 +1,14 @@
 applications:
 - path: .
-  memory: 256M
+  memory: 1024M
   instances: 1
   domain: mybluemix.net
   name: WWConnect2017Healthcare
   host: WWConnect2017Healthcare
-  disk_quota: 1024M
+  disk_quota: 2G
+  command: node lib/app.js
+  env:
+    ECHO_APP_ID: 33d2e19e-2d14-4f60-bee8-5f5ef05b304f
+    ECHO_APP_SECRET: ez1uyazowh8vkf55yhuig3zd7oictd5f
+    ECHO_WEBHOOK_SECRET: kaa3v2hxun2c8s935ycrcy2a2ysesrps
+    DEBUG: watsonwork-*
