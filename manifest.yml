@@ -8,7 +8,7 @@ applications:
   disk_quota: 2G
   command: node lib/app.js
   env:
-    ECHO_APP_ID: 33d2e19e-2d14-4f60-bee8-5f5ef05b304f
-    ECHO_APP_SECRET: ez1uyazowh8vkf55yhuig3zd7oictd5f
-    ECHO_WEBHOOK_SECRET: kaa3v2hxun2c8s935ycrcy2a2ysesrps
+    ECHO_APP_ID: 7f04e6b3-0d97-43a5-99a3-0ea824732f4b
+    ECHO_APP_SECRET: j8zur9993nx0uhroy5x3d5xneh89ibeg
+    ECHO_WEBHOOK_SECRET: vra4b798gvzs0mdrvbah545snrz8a02
     DEBUG: watsonwork-*
