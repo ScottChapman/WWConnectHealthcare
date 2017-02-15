@@ -34,6 +34,8 @@ export const echo = (appId, token) => (req, res) => {
     return;
 
   log('Got a message %o', req.body);
+  log('SpaceID: %s', req.body.spaceId);
+  log('Token: %s', token());
 
   // React to 'hello' or 'hey' keywords in the message and send an echo
   // message back to the conversation in the originating space
