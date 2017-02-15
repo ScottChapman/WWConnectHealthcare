@@ -36,6 +36,8 @@ export const echo = (appId, token) => (req, res) => {
   log('Got a message %o', req.body);
   log('SpaceID: %s', req.body.spaceId);
   log('Token: %s', token());
+  const spaceQuery = util.format('query { space(id:"%s"){ title description created updated id } }', req.body.spaceId);
+  log('spaceQuery: %s', spaceQuery);
 
   // React to 'hello' or 'hey' keywords in the message and send an echo
   // message back to the conversation in the originating space
@@ -56,6 +58,9 @@ export const echo = (appId, token) => (req, res) => {
           log('Sent message to space %s', req.body.spaceId);
       });
 };
+
+const graphQL = (request, callback) => {
+}
 
 // Send an app message to the conversation in a space
 const send = (spaceId, text, tok, cb) => {
