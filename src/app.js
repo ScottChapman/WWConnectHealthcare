@@ -35,9 +35,19 @@ export const echo = (appId, token) => (req, res) => {
 
   log('Got a message %o', req.body);
   log('SpaceID: %s', req.body.spaceId);
+  log('SpaceName: %s', req.body.spaceName);
+  log('userName: %s', req.body.userName);
   log('Token: %s', token());
-  const spaceQuery = util.format('query { space(id:"%s"){ title description created updated id } }', req.body.spaceId);
+  const spaceQuery = util.format('{ space(id:"%s"){ title description created updated id } }', req.body.spaceId);
   log('spaceQuery: %s', spaceQuery);
+  graphQL(token(), spaceQuery, (err,res) => {
+    if(!err) {
+      log('Got graphQL Response back! %o', req.body);
+    }
+    else {
+      log("Error with graphQL request... %o", err)
+    }
+  });
 
   // React to 'hello' or 'hey' keywords in the message and send an echo
   // message back to the conversation in the originating space
@@ -59,7 +69,26 @@ export const echo = (appId, token) => (req, res) => {
       });
 };
 
-const graphQL = (request, callback) => {
+const graphQL = (token, body, callback) => {
+  request.post(
+    'https://watsonwork.ibm.com/graphql', {
+      headers: {
+        COntent-Type: 'application/graphql',
+        Authorization: '' + token
+      },
+      json: true,
+      // An App message can specify a color, a title, markdown text and
+      // an 'actor' useful to show where the message is coming from
+      body: body
+    }, (err, res) => {
+      if(err || res.statusCode !== 201) {
+        log('Error sending graphQL %o', err || res.statusCode);
+        callback(err || new Error(res.statusCode));
+        return;
+      }
+      log('Send graphQL result %d, %o', res.statusCode, res.body);
+      callback(null, res.body);
+    });
 }
 
 // Send an app message to the conversation in a space
