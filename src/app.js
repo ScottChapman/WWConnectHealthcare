@@ -42,7 +42,7 @@ export const echo = (appId, token) => (req, res) => {
   log('spaceQuery: %s', spaceQuery);
   graphQL(token(), spaceQuery, (err,res) => {
     if(!err) {
-      log('Got graphQL Response back! %o', req.body);
+      log('Got graphQL Response back! %o', res.body);
     }
     else {
       log("Error with graphQL request... %o", err)
@@ -73,22 +73,20 @@ const graphQL = (token, body, callback) => {
   request.post(
     'https://watsonwork.ibm.com/graphql', {
       headers: {
-        COntent-Type: 'application/graphql',
-        Authorization: '' + token
+        'Content-Type': 'application/graphql',
+        'Authorization': 'Bearer ' + token
       },
-      json: true,
-      // An App message can specify a color, a title, markdown text and
-      // an 'actor' useful to show where the message is coming from
       body: body
-    }, (err, res) => {
-      if(err || res.statusCode !== 201) {
-        log('Error sending graphQL %o', err || res.statusCode);
-        callback(err || new Error(res.statusCode));
+    }, (err,response) => {
+      log("ERROR: %o", err);
+      log("RESPONSE: %o", response.body);
+      log("STATUS: %s", response.statusCode);
+      if(err || response.statusCode !== 200 || response.body.hasOwnProperty("errors")) {
+        callback(err || new Error(JSON.stringify(response.body.errors)));
         return;
       }
-      log('Send graphQL result %d, %o', res.statusCode, res.body);
-      callback(null, res.body);
-    });
+      callback(err,response);
+    } );
 }
 
 // Send an app message to the conversation in a space
