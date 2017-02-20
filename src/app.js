@@ -33,7 +33,8 @@ export const echo = (appId, token) => (req, res) => {
   if(req.body.type !== 'message-annotation-added' || JSON.parse(req.body.annotationPayload).applicationID !== appId)
     return;
 
-  log('Got a Lens %o', req.body);
+  var command = getHCCommand(req.body);
+  log('Got a Lens %o', command);
   // log('SpaceID: %s', req.body.spaceId);
   // log('SpaceName: %s', req.body.spaceName);
   // log('userName: %s', req.body.userName);
@@ -87,6 +88,38 @@ const graphQL = (token, body, callback) => {
       }
       callback(err,response);
     } );
+}
+
+function getHCCommand(cmd) {
+  var object = {};
+
+  if (cmd.hasOwnProperty("annotationPayload")) {
+    var payload = cmd.annotationPayload;
+    console.log("Lens: " + payload.lens);
+    object.lens = payload.lens;
+    if (payload.hasOwnProperty("category")) {
+      console.log("Category: " + payload.category);
+      object.category = payload.category;
+    }
+
+    if (payload.hasOwnProperty("extractedInfo")) {
+      var info = payload.extractedInfo;
+      if (info.hasOwnProperty("entities")) {
+        var entities = info.entities;
+        var small = _.map(_.filter(entities,{"source": "Conversation"}),(entity) => {
+          return _.pick(entity,["source","text","type"]);
+        });
+        object.entities = small;
+        console.dir(small);
+        /*
+        _.filter(entities,{"source": "Conversation"}).forEach((entity) => {
+          console.dir(_.pick(entity,["source","text","type"]))
+        })
+        */
+      }
+    }
+  }
+  return object;
 }
 
 // Send an app message to the conversation in a space
