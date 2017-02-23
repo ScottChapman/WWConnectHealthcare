@@ -488,7 +488,7 @@ if (require.main === module)
   });
 
   console.log("service Credentials");
-  console.log(proc.env.VCAP_SERVICES);
+  console.log(process.env.VCAP_SERVICES);
 
   getServiceCreds = function(name) {
    if (process.env.VCAP_SERVICES) {
